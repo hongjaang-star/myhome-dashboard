@@ -1,0 +1,866 @@
+/* ========================================
+   위젯 공통 & 개별 스타일
+   ======================================== */
+
+/* ── 위젯 공통 래퍼 ── */
+.widget {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px 8px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border-color);
+}
+.widget-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.widget-title .icon { font-size: 13px; }
+
+.widget-actions {
+  display: flex;
+  gap: 4px;
+}
+.widget-action-btn {
+  width: 22px; height: 22px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all var(--transition);
+  display: flex; align-items: center; justify-content: center;
+}
+.widget-action-btn:hover { background: var(--bg-primary); color: var(--text-primary); }
+.widget-action-btn.danger:hover { color: var(--accent-danger); }
+
+.widget-body {
+  flex: 1;
+  overflow: hidden;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 편집 모드에서 위젯 헤더 드래그 핸들 표시 */
+body.edit-mode .widget-header::before {
+  content: '⋮⋮';
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-right: 6px;
+  letter-spacing: -2px;
+  cursor: grab;
+}
+
+/* ── 🕐 시계 위젯 ── */
+.clock-widget .widget-body {
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.clock-time {
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 200;
+  letter-spacing: -2px;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.clock-time .clock-seconds {
+  font-size: 0.5em;
+  color: var(--text-secondary);
+  vertical-align: super;
+}
+.clock-date {
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+.clock-day {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ── 📅 달력 위젯 ── */
+.calendar-widget .widget-body { padding: 8px 12px; }
+
+.calendar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.cal-nav-btn {
+  width: 26px; height: 26px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all var(--transition);
+}
+.cal-nav-btn:hover { background: var(--bg-primary); color: var(--text-primary); }
+.cal-month-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  flex: 1;
+}
+.cal-day-name {
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 4px 0;
+  text-transform: uppercase;
+}
+.cal-day-name:first-child { color: #f03e3e; }
+.cal-day-name:last-child  { color: var(--accent); }
+
+.cal-day {
+  position: relative;
+  text-align: center;
+  font-size: 12px;
+  padding: 5px 2px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-primary);
+  transition: all var(--transition);
+  line-height: 1.4;
+}
+.cal-day:hover { background: var(--bg-primary); }
+.cal-day.other-month { color: var(--text-muted); }
+.cal-day.today {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+}
+.cal-day.today:hover { background: var(--accent-hover); }
+.cal-day.sunday    { color: #f03e3e; }
+.cal-day.saturday  { color: var(--accent); }
+.cal-day.today.sunday, .cal-day.today.saturday { color: #fff; }
+.cal-day.has-event::after {
+  content: '';
+  position: absolute;
+  bottom: 2px; left: 50%;
+  transform: translateX(-50%);
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--accent-success);
+}
+.cal-day.today.has-event::after { background: #fff; }
+
+/* 달력 이벤트 입력 팝업 */
+.cal-event-popup {
+  position: absolute;
+  z-index: 300;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  box-shadow: var(--shadow-card);
+  min-width: 200px;
+}
+.cal-event-popup input {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 12px;
+  outline: none;
+  margin-bottom: 6px;
+}
+.cal-event-list { margin-bottom: 6px; }
+.cal-event-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-primary);
+  padding: 2px 0;
+}
+.cal-event-del {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--accent-danger);
+  cursor: pointer;
+  font-size: 11px;
+}
+
+/* ── 🌤️ 날씨 위젯 ── */
+.weather-widget .widget-body {
+  gap: 10px;
+  justify-content: center;
+}
+
+.weather-current {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.weather-icon { font-size: 40px; line-height: 1; }
+.weather-temp-block {}
+.weather-temp {
+  font-size: 36px;
+  font-weight: 200;
+  line-height: 1;
+  color: var(--text-primary);
+}
+.weather-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+.weather-location {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.weather-details {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.weather-detail-item {
+  background: var(--bg-primary);
+  border-radius: var(--radius-sm);
+  padding: 6px 8px;
+  text-align: center;
+}
+.weather-detail-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+.weather-detail-value { font-size: 12px; font-weight: 600; }
+
+.weather-forecast {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.forecast-item {
+  background: var(--bg-primary);
+  border-radius: var(--radius-sm);
+  padding: 8px 6px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.forecast-day  { font-size: 10px; color: var(--text-muted); font-weight: 600; }
+.forecast-icon { font-size: 18px; }
+.forecast-temp { font-size: 11px; color: var(--text-primary); }
+.forecast-temp .high { color: #f03e3e; }
+.forecast-temp .low  { color: var(--accent); }
+
+.weather-loading, .weather-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.weather-loading .spinner {
+  width: 24px; height: 24px;
+  border: 2px solid var(--border-color);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── 🔖 즐겨찾기 위젯 ── */
+.bookmarks-widget .widget-body { gap: 8px; padding: 10px 12px; overflow-y: auto; }
+
+.bookmark-group-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.bookmark-group-color {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.bookmark-group-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  flex: 1;
+}
+.bookmark-group-add {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 14px;
+  transition: color var(--transition);
+}
+.bookmark-group-add:hover { color: var(--accent); }
+
+.bookmark-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.bookmark-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 4px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--transition);
+  position: relative;
+  border: 1px solid transparent;
+}
+.bookmark-link:hover {
+  background: var(--bg-primary);
+  border-color: var(--border-color);
+  transform: translateY(-2px);
+}
+.bookmark-favicon {
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  background: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.bookmark-favicon img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+}
+.bookmark-name {
+  font-size: 10px;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.2;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bookmark-link:hover .bookmark-name { color: var(--text-primary); }
+
+/* 편집 모드 - 삭제 버튼 표시 */
+body.edit-mode .bookmark-link::after {
+  content: '✕';
+  position: absolute;
+  top: -4px; right: -4px;
+  width: 16px; height: 16px;
+  background: var(--accent-danger);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  display: none;
+}
+body.edit-mode .bookmark-link:hover::after { display: flex; }
+
+.bookmark-add-link {
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  background: var(--bg-primary);
+  border: 1px dashed var(--border-color);
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+}
+.bookmark-add-link:hover { border-color: var(--accent); color: var(--accent); }
+
+/* 링크 추가 폼 */
+.bookmark-add-form {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  background: var(--bg-primary);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+.bookmark-add-form.show { display: flex; }
+.bookmark-add-form input {
+  padding: 6px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 12px;
+  outline: none;
+}
+.bookmark-add-form input:focus { border-color: var(--accent); }
+.bookmark-add-form-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+/* ── 📝 메모 위젯 ── */
+.memo-widget .widget-body { padding: 8px 12px; }
+.memo-textarea {
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 13px;
+  line-height: 1.7;
+  resize: none;
+  outline: none;
+  font-family: inherit;
+}
+.memo-textarea::placeholder { color: var(--text-muted); }
+.memo-footer {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 10px;
+  color: var(--text-muted);
+  padding-top: 6px;
+}
+
+/* ── 공통 구분선 ── */
+.widget-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 8px 0;
+  flex-shrink: 0;
+}
+
+/* ── 스켈레톤 로딩 ── */
+.skeleton {
+  background: linear-gradient(90deg,
+    var(--bg-primary) 25%,
+    var(--border-color) 50%,
+    var(--bg-primary) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.4s ease infinite;
+  border-radius: 4px;
+}
+@keyframes skeleton-loading {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ══════════════════════════════════════════
+   Phase 2 — 달력 위젯 고도화 스타일
+   ══════════════════════════════════════════ */
+
+.cal-body {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 8px 12px;
+}
+
+/* 선택된 날짜 */
+.cal-day.selected {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+/* 이벤트 도트 */
+.cal-ev-dots {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  margin-top: 2px;
+}
+.cal-ev-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* 미니 모드 */
+.cal-mini .calendar-grid { gap: 1px; }
+.cal-mini .cal-day { font-size: 10px; padding: 3px 1px; }
+.cal-mini .cal-day-name { font-size: 9px; padding: 2px 0; }
+
+/* 사이드 패널 */
+.cal-event-side {
+  border-top: 1px solid var(--border-color);
+  padding-top: 8px;
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.cal-side-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cal-side-date {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.cal-side-close {
+  background: none; border: none;
+  color: var(--text-muted); cursor: pointer; font-size: 13px;
+}
+.cal-side-list { display: flex; flex-direction: column; gap: 4px; }
+.cal-no-event { font-size: 11px; color: var(--text-muted); text-align: center; padding: 6px 0; }
+.cal-side-event {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 6px;
+  background: var(--bg-primary);
+  border-radius: 4px;
+  font-size: 12px;
+}
+.cal-side-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.cal-side-text { flex: 1; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cal-event-del {
+  background: none; border: none;
+  color: var(--text-muted); cursor: pointer; font-size: 11px;
+  transition: color var(--transition);
+}
+.cal-event-del:hover { color: var(--accent-danger); }
+
+/* 색상 선택 */
+.cal-color-row { display: flex; gap: 5px; flex-wrap: wrap; }
+.cal-color-btn {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 2px solid transparent; cursor: pointer;
+  transition: border-color var(--transition), transform var(--transition);
+}
+.cal-color-btn.active, .cal-color-btn:hover {
+  border-color: var(--text-primary);
+  transform: scale(1.15);
+}
+
+/* 일정 추가 행 */
+.cal-side-add { display: flex; flex-direction: column; gap: 5px; }
+.cal-side-input-row { display: flex; gap: 5px; }
+.cal-side-input {
+  flex: 1; padding: 5px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px; background: var(--bg-card);
+  color: var(--text-primary); font-size: 12px; outline: none;
+}
+.cal-side-input:focus { border-color: var(--accent); }
+
+/* ══════════════════════════════════════════
+   Phase 3 — 날씨 위젯 고도화 스타일
+   ══════════════════════════════════════════ */
+
+/* 도시 편집 바 */
+.weather-city-edit {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-primary);
+}
+
+/* 탭 */
+.weather-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 6px 12px 0;
+  flex-shrink: 0;
+}
+.weather-tab {
+  flex: 1;
+  padding: 4px 0;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.weather-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.weather-tab:hover { color: var(--text-primary); }
+
+/* 시간별 예보 */
+.weather-hourly {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+}
+.weather-hourly::-webkit-scrollbar { height: 3px; }
+.weather-hourly::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 2px; }
+.hourly-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  padding: 8px 10px;
+  background: var(--bg-primary);
+  border-radius: var(--radius-sm);
+}
+.hourly-time { font-size: 10px; color: var(--text-muted); }
+.hourly-icon { font-size: 18px; }
+.hourly-temp { font-size: 12px; font-weight: 600; color: var(--text-primary); }
+.hourly-rain { font-size: 10px; color: #74c0fc; }
+
+/* 3일 예보 (풀) */
+.weather-forecast-full {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.forecast-full-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--bg-primary);
+  border-radius: var(--radius-sm);
+}
+.forecast-full-left { display: flex; align-items: center; gap: 10px; }
+.forecast-full-right { display: flex; align-items: center; gap: 10px; }
+.forecast-full-day { font-size: 12px; font-weight: 600; color: var(--text-primary); min-width: 48px; }
+.forecast-full-icon { font-size: 20px; }
+.forecast-full-desc { font-size: 11px; color: var(--text-muted); }
+.forecast-full-rain { font-size: 11px; color: #74c0fc; }
+.forecast-full-temp { font-size: 12px; }
+.forecast-full-temp .high { color: #f03e3e; font-weight: 700; }
+.forecast-full-temp .low  { color: var(--accent); }
+
+/* ══════════════════════════════════════════
+   Phase 4 — 즐겨찾기 위젯 고도화 스타일
+   ══════════════════════════════════════════ */
+
+/* 링크 래퍼 (드래그 가능) */
+.bookmark-link-wrap {
+  position: relative;
+  border-radius: var(--radius-sm);
+  transition: opacity var(--transition);
+}
+.bookmark-link-wrap.bm-dragging { opacity: 0.4; }
+.bookmark-link-wrap.bm-drag-over {
+  outline: 2px dashed var(--accent);
+  outline-offset: 2px;
+}
+
+/* 링크 액션 버튼 (hover 시 표시) */
+.bm-link-actions {
+  position: absolute;
+  top: 2px; right: 2px;
+  display: none;
+  gap: 2px;
+  z-index: 10;
+}
+.bookmark-link-wrap:hover .bm-link-actions { display: flex; }
+.bm-icon-btn {
+  width: 16px; height: 16px;
+  border: none; border-radius: 3px;
+  background: var(--bg-secondary);
+  color: var(--text-muted);
+  font-size: 10px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition);
+}
+.bm-icon-btn:hover { background: var(--bg-primary); color: var(--text-primary); }
+.bm-icon-btn.danger:hover { color: var(--accent-danger); }
+
+/* 즐겨찾기 추가 버튼 재정의 */
+.bookmark-add-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: var(--bg-primary);
+  border: 1px dashed var(--border-color);
+  color: var(--text-muted);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all var(--transition);
+  width: auto;
+  height: auto;
+  grid-column: 1 / -1;
+}
+.bookmark-add-link:hover { border-color: var(--accent); color: var(--accent); }
+
+/* 그룹 색상 클릭 커서 */
+.bookmark-group-color { cursor: pointer; transition: transform var(--transition); }
+.bookmark-group-color:hover { transform: scale(1.4); }
+
+/* 그룹 이름 클릭 커서 */
+.bookmark-group-name { cursor: pointer; }
+.bookmark-group-name:hover { color: var(--text-primary); }
+
+/* 인라인 이름 편집 입력 */
+.bm-inline-input {
+  font-size: 11px; font-weight: 700;
+  border: none; border-bottom: 1px solid var(--accent);
+  background: transparent; color: var(--text-primary);
+  outline: none; flex: 1; min-width: 60px;
+}
+
+/* 즐겨찾기 모달 오버레이 */
+.bm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bm-modal-box {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+  min-width: 300px;
+  max-width: 420px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.bm-modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 14px; font-weight: 700; color: var(--text-primary);
+}
+.bm-modal-close {
+  background: none; border: none;
+  color: var(--text-muted); cursor: pointer; font-size: 14px;
+  transition: color var(--transition);
+}
+.bm-modal-close:hover { color: var(--accent-danger); }
+.bm-modal-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 14px; }
+.bm-modal-footer {
+  display: flex; gap: 8px; justify-content: flex-end;
+  padding: 12px 18px;
+  border-top: 1px solid var(--border-color);
+}
+
+/* 모달 필드 */
+.bm-modal-field { display: flex; flex-direction: column; gap: 6px; }
+.bm-modal-field label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* 색상 스와치 */
+.bm-swatch-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.bm-swatch {
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 2px solid transparent; cursor: pointer;
+  transition: border-color var(--transition), transform var(--transition);
+}
+.bm-swatch:hover { transform: scale(1.15); }
+.bm-swatch.bm-swatch-active { border-color: var(--text-primary); transform: scale(1.15); }
+
+/* ── 그룹 드래그 핸들 ── */
+.bm-grp-drag-handle {
+  cursor: grab;
+  color: var(--text-muted);
+  font-size: 14px;
+  padding: 0 2px;
+  user-select: none;
+  flex-shrink: 0;
+  opacity: 0.4;
+  transition: opacity var(--transition);
+}
+.bookmark-group-header:hover .bm-grp-drag-handle { opacity: 1; }
+.bm-grp-drag-handle:active { cursor: grabbing; }
+
+/* 그룹 드래그 중 */
+.bookmark-group.bm-grp-dragging { opacity: 0.35; }
+
+/* 그룹 drop 대상 — 위/아래 구분선 */
+.bookmark-group.bm-grp-drag-over-top {
+  border-top: 2px solid var(--accent);
+  margin-top: -2px;
+}
+.bookmark-group.bm-grp-drag-over-bot {
+  border-bottom: 2px solid var(--accent);
+}
+
+/* 빈 그룹 영역 drop 하이라이트 */
+.bookmark-links.bm-links-drag-over {
+  outline: 2px dashed var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── 툴팁 ── */
+[data-tooltip] {
+  position: relative;
+}
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 11px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 500;
+}
+[data-tooltip]:hover::after { opacity: 1; }

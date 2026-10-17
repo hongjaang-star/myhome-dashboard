@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 스크립트·통신 대상 제한: 만일 XSS 가 생겨도 외부 스크립트 로드/임의 서버 전송을 막음 -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/client; connect-src 'self' https://www.googleapis.com https://accounts.google.com/gsi/ https://wttr.in; frame-src https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; img-src * data:; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>나만의 홈 대시보드</title>
+
+  <link rel="stylesheet" href="assets/css/lib/gridstack.min.css">
+  <link rel="stylesheet" href="assets/css/dashboard.css">
+  <link rel="stylesheet" href="assets/css/widgets.css">
+</head>
+<body class="theme-dark">
+
+  <!-- 상단 헤더 -->
+  <header class="dash-header">
+    <div class="dash-header__left">
+      <span class="dash-logo">⚡ MyHome</span>
+    </div>
+    <div class="dash-header__center">
+      <form class="search-bar" id="searchForm">
+        <div class="search-engine-select">
+          <button type="button" class="engine-btn active" data-engine="google" title="Google">G</button>
+          <button type="button" class="engine-btn" data-engine="naver" title="Naver">N</button>
+          <button type="button" class="engine-btn" data-engine="bing" title="Bing">B</button>
+        </div>
+        <input type="text" id="searchInput" placeholder="검색어를 입력하세요..." autocomplete="off">
+        <button type="submit" class="search-submit">🔍</button>
+      </form>
+    </div>
+    <div class="dash-header__right">
+      <button class="sync-btn is-off" id="syncBtn" title="Google Drive 동기화">☁ 로그인</button>
+      <button class="icon-btn" id="themeToggleBtn" title="테마 전환">🌙</button>
+      <button class="icon-btn" id="editModeBtn" title="레이아웃 편집">✏️</button>
+      <button class="icon-btn" id="settingsBtn" title="설정">⚙️</button>
+    </div>
+  </header>
+
+  <!-- 편집 모드 툴바 -->
+  <div class="edit-toolbar" id="editToolbar" style="display:none;">
+    <span class="edit-toolbar__label">✏️ 레이아웃 편집 모드</span>
+    <button class="btn btn-sm btn-primary" id="addWidgetBtn">+ 위젯 추가</button>
+    <button class="btn btn-sm btn-success" id="saveLayoutBtn">💾 저장</button>
+    <button class="btn btn-sm btn-danger" id="resetLayoutBtn">↺ 초기화</button>
+    <button class="btn btn-sm btn-secondary" id="exitEditBtn">✕ 나가기</button>
+  </div>
+
+  <!-- 메인 대시보드 그리드 -->
+  <main class="dash-main" id="dashMain">
+    <div class="grid-stack" id="mainGrid"></div>
+  </main>
+
+  <!-- 위젯 추가 모달 -->
+  <div class="modal-overlay" id="addWidgetModal" style="display:none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>위젯 추가</h3>
+        <button class="modal-close" id="closeAddWidgetModal">✕</button>
+      </div>
+      <div class="modal-body widget-picker">
+        <div class="widget-pick-item" data-widget="clock">
+          <div class="widget-pick-icon">🕐</div>
+          <div class="widget-pick-name">시계</div>
+        </div>
+        <div class="widget-pick-item" data-widget="calendar">
+          <div class="widget-pick-icon">📅</div>
+          <div class="widget-pick-name">달력</div>
+        </div>
+        <div class="widget-pick-item" data-widget="weather">
+          <div class="widget-pick-icon">🌤️</div>
+          <div class="widget-pick-name">날씨</div>
+        </div>
+        <div class="widget-pick-item" data-widget="bookmarks">
+          <div class="widget-pick-icon">🔖</div>
+          <div class="widget-pick-name">즐겨찾기</div>
+        </div>
+        <div class="widget-pick-item" data-widget="memo">
+          <div class="widget-pick-icon">📝</div>
+          <div class="widget-pick-name">메모</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 설정 패널 -->
+  <div class="settings-panel" id="settingsPanel" style="display:none;">
+    <div class="settings-panel__header">
+      <h3>⚙️ 설정</h3>
+      <button class="modal-close" id="closeSettingsBtn">✕</button>
+    </div>
+    <div class="settings-panel__body">
+      <div class="settings-group">
+        <label class="settings-label">Google Drive 동기화</label>
+        <div class="sync-info" id="syncInfo"></div>
+        <div class="settings-row">
+          <button class="btn btn-sm btn-primary" id="syncLoginBtn">Google 로그인</button>
+          <button class="btn btn-sm btn-primary" id="syncNowBtn">🔄 지금 동기화</button>
+          <button class="btn btn-sm btn-secondary" id="syncPullBtn">📥 Drive에서 불러오기</button>
+          <button class="btn btn-sm btn-secondary" id="syncPushBtn">📤 Drive에 덮어쓰기</button>
+          <button class="btn btn-sm btn-secondary" id="syncLogoutBtn">로그아웃</button>
+          <button class="btn btn-sm btn-secondary" id="syncRestoreBtn">↩ 이전 데이터 복원</button>
+        </div>
+      </div>
+      <div class="settings-group">
+        <label class="settings-label">배경 테마</label>
+        <div class="theme-options">
+          <button class="theme-opt" data-theme="theme-dark">🌑 다크</button>
+          <button class="theme-opt" data-theme="theme-light">☀️ 라이트</button>
+          <button class="theme-opt" data-theme="theme-ocean">🌊 오션</button>
+          <button class="theme-opt" data-theme="theme-forest">🌲 포레스트</button>
+        </div>
+      </div>
+      <div class="settings-group">
+        <label class="settings-label">배경 이미지 URL</label>
+        <div class="settings-row">
+          <input type="text" id="bgImageInput" class="settings-input" placeholder="https://...">
+          <button class="btn btn-sm btn-primary" id="applyBgBtn">적용</button>
+          <button class="btn btn-sm btn-secondary" id="clearBgBtn">제거</button>
+        </div>
+      </div>
+      <div class="settings-group">
+        <label class="settings-label">설정 내보내기 / 가져오기</label>
+        <div class="settings-row">
+          <button class="btn btn-sm btn-secondary" id="exportSettingsBtn">📤 내보내기</button>
+          <button class="btn btn-sm btn-secondary" id="importSettingsBtn">📥 가져오기</button>
+          <input type="file" id="importFileInput" accept=".json" style="display:none;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Google 로그인 안내 (첫 방문) -->
+  <div class="modal-overlay login-overlay" id="loginOverlay" style="display:none;">
+    <div class="modal-box login-box">
+      <div class="login-logo">⚡ MyHome</div>
+      <p class="login-desc">
+        Google 계정으로 로그인하면 대시보드 데이터가 <b>내 Google Drive</b>의
+        <b>MyHome Dashboard</b> 폴더에 저장되어, 인터넷만 되면 어느 기기에서든 같은 화면을 사용할 수 있습니다.
+      </p>
+      <button class="btn btn-primary login-google-btn" id="loginGoogleBtn">
+        <span class="login-g">G</span> Google 계정으로 로그인
+      </button>
+      <button class="btn btn-secondary login-local-btn" id="loginLocalBtn">로그인 없이 이 기기에서만 사용</button>
+      <p class="login-note" id="loginNote"></p>
+      <p class="login-fine">이 앱은 자신이 만든 파일에만 접근합니다 (drive.file 권한). 다른 Drive 파일은 볼 수 없습니다.</p>
+    </div>
+  </div>
+
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <!-- Gridstack.js -->
+  <script src="assets/js/lib/gridstack-all.js"></script>
+  <!-- 앱 모듈 -->
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/storage.js"></script>
+  <script src="assets/js/drive-sync.js"></script>
+  <script src="assets/js/widgets/clock.js"></script>
+  <script src="assets/js/widgets/calendar.js"></script>
+  <script src="assets/js/widgets/weather.js"></script>
+  <script src="assets/js/widgets/bookmarks.js"></script>
+  <script src="assets/js/widgets/memo.js"></script>
+  <script src="assets/js/grid.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
