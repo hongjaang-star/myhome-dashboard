@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <title>MyHome 개인정보처리방침</title>
+  <style>
+    :root { --bg: #f7f8fb; --fg: #1f2330; --muted: #5d6478; --accent: #4263eb; --card: #ffffff; --border: #e3e6ef; }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #0f1117; --fg: #e8eaf2; --muted: #9aa1b8; --accent: #748ffc; --card: #1a1d27; --border: #2a2e3d; }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.75 -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", sans-serif; }
+    main { max-width: 760px; margin: 0 auto; padding: 40px 16px 64px; }
+    h1 { font-size: 26px; margin: 0 0 4px; }
+    h2 { font-size: 18px; margin: 32px 0 8px; }
+    p, li { color: var(--fg); }
+    .meta { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; }
+    code { font-size: 13px; background: var(--border); padding: 1px 6px; border-radius: 4px; word-break: break-all; }
+    a { color: var(--accent); }
+    hr { border: 0; border-top: 1px solid var(--border); margin: 40px 0 24px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>MyHome 대시보드 개인정보처리방침</h1>
+  <div class="meta">시행일: 2026년 10월 18일 · 서비스 주소: <a href="./">https://hongjaang-star.github.io/myhome-dashboard/</a></div>
+
+  <div class="card">
+    <strong>요약</strong> — MyHome 은 운영 서버가 없는 개인용 대시보드입니다.
+    여러분의 데이터는 <strong>여러분 자신의 브라우저와 여러분 자신의 Google Drive</strong> 에만 저장되며,
+    개발자를 포함한 누구에게도 전송·수집·공유되지 않습니다.
+  </div>
+
+  <h2>1. 처리하는 정보</h2>
+  <ul>
+    <li><strong>대시보드 데이터</strong>: 위젯 배치, 테마, 즐겨찾기, 메모, 달력 일정, 날씨 도시 이름</li>
+    <li><strong>Google 계정 이메일 주소</strong>: 로그인한 계정을 화면에 표시하고 다음 로그인 시 계정을 미리 선택하기 위해 사용</li>
+    <li><strong>Google 액세스 토큰</strong>: Google Drive 에 데이터를 저장·불러오기 위한 임시 인증값 (약 1시간 유효)</li>
+  </ul>
+
+  <h2>2. 저장 위치</h2>
+  <ul>
+    <li><strong>브라우저 저장소(localStorage)</strong>: 위 정보는 사용 중인 기기의 브라우저에 저장됩니다.</li>
+    <li><strong>본인의 Google Drive</strong>: Google 로그인 시 대시보드 데이터가 <code>내 드라이브 › MyHome Dashboard › dashboard_data.json</code> 파일로 저장됩니다.</li>
+    <li>MyHome 은 별도의 서버나 데이터베이스를 운영하지 않으며, 개발자는 위 정보에 접근할 수 없습니다.</li>
+  </ul>
+
+  <h2>3. Google 사용자 데이터의 사용 범위</h2>
+  <ul>
+    <li>요청하는 권한은 <code>https://www.googleapis.com/auth/drive.file</code> 하나입니다.
+      이 권한으로는 <strong>MyHome 이 직접 만든 파일만</strong> 읽고 쓸 수 있으며, Drive 의 다른 파일은 볼 수 없습니다.</li>
+    <li>Google 사용자 데이터는 대시보드 데이터의 저장·불러오기 기능에만 사용하며, 광고·분석·판매·제3자 제공에 사용하지 않습니다.</li>
+    <li>MyHome 의 Google API 데이터 사용은 <a href="https://developers.google.com/terms/api-services-user-data-policy" rel="noopener noreferrer">Google API 서비스 사용자 데이터 정책</a>(제한적 사용 요건 포함)을 준수합니다.</li>
+  </ul>
+
+  <h2>4. 외부 서비스</h2>
+  <ul>
+    <li><strong>Google 로그인·Google Drive API</strong> (Google LLC): 인증과 데이터 저장. <a href="https://policies.google.com/privacy" rel="noopener noreferrer">Google 개인정보처리방침</a></li>
+    <li><strong>wttr.in</strong>: 날씨 위젯이 설정한 도시 이름으로 날씨를 조회합니다. 도시 이름 외 개인정보는 전송하지 않습니다.</li>
+    <li><strong>GitHub Pages</strong> (GitHub, Inc.): 웹페이지 파일을 제공하며, 일반적인 웹 접속 기록이 GitHub 에 남을 수 있습니다.</li>
+    <li>즐겨찾기 아이콘 표시를 위해 등록한 사이트의 아이콘(favicon) 이미지를 해당 사이트에서 불러옵니다.</li>
+  </ul>
+
+  <h2>5. 보관 기간과 삭제</h2>
+  <ul>
+    <li>브라우저 데이터: 대시보드 설정 › 로그아웃 시 "이 기기 데이터도 삭제"를 선택하거나 브라우저의 사이트 데이터를 지우면 삭제됩니다.</li>
+    <li>Drive 데이터: Google Drive 에서 <code>MyHome Dashboard</code> 폴더를 삭제하면 됩니다.</li>
+    <li>권한 철회: 설정 › 로그아웃 시 토큰이 폐기되며, <a href="https://myaccount.google.com/permissions" rel="noopener noreferrer">Google 계정 › 서드파티 앱 액세스</a>에서도 언제든 철회할 수 있습니다.</li>
+  </ul>
+
+  <h2>6. 쿠키와 추적</h2>
+  <p>MyHome 은 광고·분석용 쿠키나 추적 도구를 사용하지 않습니다.</p>
+
+  <h2>7. 변경과 문의</h2>
+  <p>이 방침이 바뀌면 이 페이지에 게시합니다. 문의는
+    <a href="https://github.com/hongjaang-star/myhome-dashboard/issues" rel="noopener noreferrer">GitHub 저장소의 Issues</a> 로 남겨 주세요.</p>
+
+  <hr>
+  <h1 style="font-size:20px">Privacy Policy (English summary)</h1>
+  <p>MyHome is a personal dashboard with no backend server. Your dashboard data (layout, theme, bookmarks, memos, calendar events, weather city) is stored only in your browser's localStorage and, when you sign in with Google, in a single file in <em>your own</em> Google Drive (<code>MyHome Dashboard/dashboard_data.json</code>).
+  The only Google scope requested is <code>drive.file</code>, which allows access solely to files created by this app. Google user data is used only to save and load your dashboard, is never sent to the developer or any third party, and is not used for advertising or analytics.
+  MyHome's use of information received from Google APIs adheres to the <a href="https://developers.google.com/terms/api-services-user-data-policy" rel="noopener noreferrer">Google API Services User Data Policy</a>, including the Limited Use requirements.
+  You can delete your data by removing the Drive folder and signing out (with the "delete local data" option), and revoke access at <a href="https://myaccount.google.com/permissions" rel="noopener noreferrer">myaccount.google.com/permissions</a>. Contact: <a href="https://github.com/hongjaang-star/myhome-dashboard/issues" rel="noopener noreferrer">GitHub Issues</a>.</p>
+</main>
+</body>
+</html>

@@ -504,3 +504,6 @@ body.edit-mode .grid-stack-item:hover .ui-resizable-se { opacity: 1; }
 @media (max-width: 768px) {
   .sync-btn { padding: 0 8px; font-size: 11px; }
 }
+
+.login-fine a, .sync-privacy { color: var(--accent); }
+.sync-privacy { display: inline-block; font-size: 11px; margin-bottom: 10px; }
