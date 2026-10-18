@@ -7,7 +7,7 @@
    설정 방법은 GOOGLE_DRIVE_SETUP.md 참고
    ======================================== */
 window.DASH_CONFIG = {
-  GOOGLE_CLIENT_ID : '',
+  GOOGLE_CLIENT_ID : '610076714770-gikmc0eirb9c685ckm6658aue84p9i34.apps.googleusercontent.com',
   DRIVE_FOLDER_NAME: 'MyHome Dashboard',
   DRIVE_FILE_NAME  : 'dashboard_data.json',
 };
